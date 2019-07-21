@@ -9,7 +9,3 @@ def APISetPass(request):
         'tg': 1238860
     }
     return JsonResponse(a)
-
-def SET(request):
-    set.pass()
-    return HttpResponse('ок')
