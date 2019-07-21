@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 
 def APISetPass(request):
@@ -9,6 +9,9 @@ def APISetPass(request):
         'tg': 1238860
     }
     return JsonResponse(a)
+
+def APISET(request):
+    return HttpResponse('ок')
 
 
 def APIAll (request):
