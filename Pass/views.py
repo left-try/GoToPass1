@@ -10,8 +10,7 @@ def APISetPass(request):
     }
     return JsonResponse(a)
 
-def SET(request):
-    set.pass()
+def APISET(request):
     return HttpResponse('ок')
 
 
