@@ -78,6 +78,7 @@ def admink(request):
 
 
 
+
     else:
         return redirect('/login')
 
