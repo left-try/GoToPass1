@@ -82,7 +82,6 @@ def admink(request):
         return redirect('/login')
 
 
-
 def APISETPASS(request):
     password = request.GET.get('pass', '')
     person = Person.objects.filter(pass_gen = password)
