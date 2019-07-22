@@ -69,6 +69,7 @@ def admink(request):
                     # See the ReportLab documentation for the full list of functionality.
                     p.drawString(100, 100, qr_key)
 
+
                     # Close the PDF object cleanly, and we're done.
                     p.showPage()
                     p.save()
