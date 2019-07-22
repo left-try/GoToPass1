@@ -1,7 +1,7 @@
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 
-def APISetPass(request):
+def APISETPASS(request):
     a = {
         'name': 'Вася',
         'surname': 'Пупкин',
