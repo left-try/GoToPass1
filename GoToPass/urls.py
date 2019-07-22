@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from Pass.views import APISETPASS, APIAll, APISET, login_page, logout_page
+from Pass.views import APISETPASS, APIAll, APISET, login_page, logout_page, admink
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,5 +24,6 @@ urlpatterns = [
     path('api/all', APIAll),
     path('api/set', APISET),
     path('login', login_page),
-    path('logout', logout_page)
+    path('logout', logout_page),
+    path('', admink)
 ]

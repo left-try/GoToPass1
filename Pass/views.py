@@ -34,6 +34,16 @@ def logout_page(request):
         logout(request)
     return redirect('/login')
 
+def admink(request):
+    if request.user.is_authenticated:
+        if request.method == 'GET':
+            return render(request, 'admin.html')
+        elif request.method == 'POST':
+            if request.POST['submit'] == 'Выдать GoToPass':
+                pass
+    else:
+        return redirect('/login')
+
 
 def APISETPASS(request):
     a = {
