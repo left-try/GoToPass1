@@ -4,6 +4,9 @@ from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
+from Pass.models import Person
+
+
 def login_page(request):
 
     if request.method == 'GET':
@@ -40,7 +43,9 @@ def admink(request):
             return render(request, 'admin.html')
         elif request.method == 'POST':
             if request.POST['submit'] == 'Выдать GoToPass':
-                pass
+                pers = Person()
+                nso = request.POST['FirstLastname'].split('<br>')
+
     else:
         return redirect('/login')
 
