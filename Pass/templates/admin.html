@@ -1,6 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
 <title>GoToPass:StudentsList</title>
+
+<ul>
+{% for student in students %}
+    <li>{{ student.name }} {{ student.surname }} (PASS: {{ student.pass_gen }})</li>
+{% endfor %}
+</ul>
+
+<a href="/pdf" class="btn btn-success btn-sm">Скачать pdf</a>
+
 <div class="form-group">
 <form method="post">
     {% csrf_token %}
