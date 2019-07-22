@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
+import secrets
 
 from Pass.models import Person
 
@@ -43,8 +44,19 @@ def admink(request):
             return render(request, 'admin.html')
         elif request.method == 'POST':
             if request.POST['submit'] == 'Выдать GoToPass':
-                pers = Person()
-                nso = request.POST['FirstLastname'].split('<br>')
+
+                nso = request.POST['FirstLastname'].split('\n')
+                for student_nso in nso:
+                    exempl = student_nso.split(' ')
+                    pers = Person()
+                    pers.name = exempl[1]
+                    pers.surname = exempl[0]
+                    pers.otchestvo = exempl[2]
+                    pers.pass_gen = secrets.token_hex(16)
+                    pers.save()
+            return redirect('/')
+
+
 
     else:
         return redirect('/login')
