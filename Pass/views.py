@@ -1,7 +1,9 @@
+import io
+
 import pyqrcode
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, FileResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 import secrets
@@ -12,7 +14,6 @@ from Pass.models import Person
 
 
 def login_page(request):
-
     if request.method == 'GET':
         if request.user.is_authenticated:
             return redirect('/')
@@ -35,19 +36,53 @@ def login_page(request):
             return redirect('/login')
 
 
-
 def logout_page(request):
     if request.method == 'POST':
         logout(request)
     return redirect('/login')
 
+
+def make_pdf(request):
+    if not request.user.is_authenticated:
+        return redirect('/')
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="gotopass.pdf"'
+
+    # Create the PDF object, using the response object as its "file."
+    p = canvas.Canvas(response)
+
+
+    students = Person.objects.all()
+    # qr_key = pyqrcode.create('0987654321', error='L', version=27, mode='binary')
+    # qr_key.png('code.png', scale=6, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xcc])
+    # qr_key.show()
+    offset = 1
+    for student in students:
+        # Draw things on the PDF. Here's where the PDF generation happens.
+        # See the ReportLab documentation for the full list of functionality.
+        # Draw things on the PDF. Here's where the PDF generation happens.
+        # See the ReportLab documentation for the full list of functionality.
+        p.drawString(200, 500, student.pass_gen)
+
+        # Close the PDF object cleanly, and we're done.
+        p.showPage()
+
+        offset += 20
+        #print("doing")
+
+    p.showPage()
+    p.save()
+    return response
+
+
 def admink(request):
     if request.user.is_authenticated:
         if request.method == 'GET':
-            return render(request, 'admin.html')
+            students = Person.objects.all()
+            return render(request, 'admin.html', {'students': students})
         elif request.method == 'POST':
             if request.POST['submit'] == 'Выдать GoToPass':
-
+                # save to d
                 nso = request.POST['FirstLastname'].split('\n')
                 for student_nso in nso:
                     exempl = student_nso.split(' ')
@@ -57,51 +92,37 @@ def admink(request):
                     pers.otchestvo = exempl[2]
                     pers.pass_gen = secrets.token_hex(16)
                     pers.save()
-                    qr_key = pyqrcode.create(pers, error='L', version=27, mode='binary')
-
-                    response = HttpResponse(content_type='application/pdf')
-                    response['Content-Disposition'] = 'attachment; filename="gotopass.pdf"'
-
-                    # Create the PDF object, using the response object as its "file."
-                    p = canvas.Canvas(response)
-
-                    # Draw things on the PDF. Here's where the PDF generation happens.
-                    # See the ReportLab documentation for the full list of functionality.
-                    p.drawString(100, 100, qr_key)
-
-
-                    # Close the PDF object cleanly, and we're done.
-                    p.showPage()
-                    p.save()
-                    return response
             return redirect('/')
-
-
-
-
     else:
         return redirect('/login')
 
 
 def APISETPASS(request):
-    password = request.GET.get('pass', '')
-    person = Person.objects.filter(pass_gen = password)
+    stud = request.GET.get('pass', 0)
+    pers = Person.objects.get(pass_gen=stud)
+    pers.tg_id = request.GET.get('tg_id', 0)
 
-    return JsonResponse()
+    pers.save()
+
+    return JsonResponse(pers, safe=False)
+
 
 def APISET(request):
-    tg_id = request.GET.get('tg', '')
-    password = request.GET.get('pass', '')
-    person = Person.objects.filter(pass_gen = password)
-    if tg_id == '' or password == '':
-        return HttpResponse("incorrect request", status=422)
-    else:
-        if password == person.pass_gen:
-            person.tg_id = tg_id
-        else:
-            return HttpResponse('Неправильный pass')
+    return HttpResponse('ок')
 
 
-def APIAll (request):
+def APIAll(request):
+    a = {
+        'name': 'Вася',
+        'surname': 'Пупкин',
+        'password': 123456,
+        'tg': 1238860
+    }
 
-    return JsonResponse([], safe=False)
+    b = {
+        'name': 'Петя',
+        'surname': 'Пупкин',
+        'password': 123456,
+        'tg': 1238860
+    }
+    return JsonResponse([a, b], safe=False)
