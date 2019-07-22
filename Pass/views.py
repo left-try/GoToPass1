@@ -1,9 +1,12 @@
+import pyqrcode
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 import secrets
+
+from reportlab.pdfgen import canvas
 
 from Pass.models import Person
 
@@ -54,6 +57,22 @@ def admink(request):
                     pers.otchestvo = exempl[2]
                     pers.pass_gen = secrets.token_hex(16)
                     pers.save()
+                    qr_key = pyqrcode.create(pers, error='L', version=27, mode='binary')
+
+                    response = HttpResponse(content_type='application/pdf')
+                    response['Content-Disposition'] = 'attachment; filename="gotopass.pdf"'
+
+                    # Create the PDF object, using the response object as its "file."
+                    p = canvas.Canvas(response)
+
+                    # Draw things on the PDF. Here's where the PDF generation happens.
+                    # See the ReportLab documentation for the full list of functionality.
+                    p.drawString(100, 100, qr_key)
+
+                    # Close the PDF object cleanly, and we're done.
+                    p.showPage()
+                    p.save()
+                    return response
             return redirect('/')
 
 
