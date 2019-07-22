@@ -16,12 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from Pass.views import APISETPASS, APIAll, APISET
+from Pass.views import APISETPASS, APIAll, APISET, login_page, logout_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/get', APISETPASS),
     path('api/all', APIAll),
     path('api/set', APISET),
-
+    path('login', login_page),
+    path('logout', logout_page)
 ]

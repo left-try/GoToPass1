@@ -2,9 +2,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
-
+from django.contrib import messages
 
 def login_page(request):
+
     if request.method == 'GET':
         if request.user.is_authenticated:
             return redirect('/')
@@ -14,7 +15,8 @@ def login_page(request):
         password = request.POST.get('password', '')
 
         if username == '' or password == '':
-            return HttpResponse("Заполните все поля")
+            messages.error(request, 'Заполните все поля!')
+            return redirect('/login')
 
         user = authenticate(username=username, password=password)
 
@@ -22,7 +24,8 @@ def login_page(request):
             login(request, user)
             return redirect('/')
         else:
-            return HttpResponse("Логин неверен")
+            messages.error(request, 'Неправильный логин или пароль!')
+            return redirect('/login')
 
 
 

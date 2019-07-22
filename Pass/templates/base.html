@@ -19,7 +19,11 @@
       <li class="nav-item active">
         <a class="nav-link" href="">Главная<span class="sr-only">(current)</span></a>
       </li>
-      </ul>
+            </ul>
+            <form method="post" action="/logout">
+      {% csrf_token %}
+      <input type="submit" name="LogOut" class="btn btn-primary" value="Выйти">
+        </form>
       </div>
       </nav>
       <div class="container">
