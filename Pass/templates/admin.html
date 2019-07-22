@@ -6,7 +6,7 @@
     {% csrf_token %}
 <label for textarea>Впишите имена участников:</label>
 <textarea placeholder="Имя Фамилия Отчество" class="form-control" name="FirstLastname"  id="textarea"></textarea>
-<input type="submit" class="btn btn-primary" value="Выдать GoToPass" />
+<input type="submit" name="submit" class="btn btn-primary" value="Выдать GoToPass" />
 </form>
 </div>
 {% endblock %}
