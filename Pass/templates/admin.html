@@ -3,9 +3,10 @@
 <title>GoToPass:StudentsList</title>
 <div class="form-group">
 <form method="post">
+    {% csrf_token %}
 <label for textarea>Впишите имена участников:</label>
-<texarea placeholder="Имя Фамилия Отчество" class="form-control" name="FirstLastname"  id="textarea"></texarea>
-<input type="submit" class="form-control" value="Выдать GoToPass" />
+<textarea placeholder="Имя Фамилия Отчество" class="form-control" name="FirstLastname"  id="textarea"></textarea>
+<input type="submit" class="btn btn-primary" value="Выдать GoToPass" />
 </form>
 </div>
 {% endblock %}
