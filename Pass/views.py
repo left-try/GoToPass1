@@ -98,31 +98,24 @@ def admink(request):
 
 
 def APISETPASS(request):
-    stud = request.GET.get('pass', 0)
-    pers = Person.objects.get(pass_gen=stud)
-    pers.tg_id = request.GET.get('tg_id', 0)
+    password = request.GET.get('pass', '')
+    person = Person.objects.filter(pass_gen = password)
 
-    pers.save()
-
-    return JsonResponse(pers, safe=False)
-
+    return JsonResponse()
 
 def APISET(request):
-    return HttpResponse('ок')
+    tg_id = request.GET.get('tg', '')
+    password = request.GET.get('pass', '')
+    person = Person.objects.filter(pass_gen = password)
+    if tg_id == '' or password == '':
+        return HttpResponse("incorrect request", status=422)
+    else:
+        if password == person.pass_gen:
+            person.tg_id = tg_id
+        else:
+            return HttpResponse('Неправильный pass')
 
 
-def APIAll(request):
-    a = {
-        'name': 'Вася',
-        'surname': 'Пупкин',
-        'password': 123456,
-        'tg': 1238860
-    }
+def APIAll (request):
 
-    b = {
-        'name': 'Петя',
-        'surname': 'Пупкин',
-        'password': 123456,
-        'tg': 1238860
-    }
-    return JsonResponse([a, b], safe=False)
+    return JsonResponse([], safe=False)
