@@ -100,8 +100,10 @@ def admink(request):
 def APISETPASS(request):
     password = request.GET.get('pass', '')
     person = Person.objects.filter(pass_gen = password)
-
-    return JsonResponse()
+    if person == '':
+        return HttpResponse('Неверный pass')
+    else:
+        return JsonResponse(person)
 
 def APISET(request):
     tg_id = request.GET.get('tg', '')
