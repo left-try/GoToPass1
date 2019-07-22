@@ -22,5 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/get', APISETPASS),
     path('api/all', APIAll),
-    path('api/set', APISET)
+    path('api/set', APISET),
+
 ]

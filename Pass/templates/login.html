@@ -3,11 +3,9 @@
 <title>AdminLogIn</title>
 <h1>Вход на сайт</h1>
 {% if messages %}
-<ul>
     {% for message in messages %}
-    <li>{{ message }}</li>
+    <div>{{ message }}</div>
     {% endfor %}
-</ul>
 {% endif %}
 <form method="post">
     {% csrf_token %}

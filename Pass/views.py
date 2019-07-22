@@ -25,28 +25,6 @@ def login_page(request):
             return HttpResponse("Логин неверен")
 
 
-def register(request):
-    if request.method == 'GET':
-        if request.user.is_authenticated:
-            return redirect('/')
-        return render(request, 'register.html')
-    if request.method == 'POST':
-        username = request.POST.get('login', '')
-        password = request.POST.get('password', '')
-        email = request.POST.get('email', '')
-
-        if username == '' or password == '' or email == '':
-            return HttpResponse("Заполните все поля")
-
-        if User.objects.filter(username=username).exists():
-            return HttpResponse("Логин занят")
-
-        user = User.objects.create_user(username, email, password)
-        user.save()
-
-        login(request, user)
-
-        return redirect('/')
 
 
 def logout_page(request):
