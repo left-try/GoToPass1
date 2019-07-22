@@ -20,9 +20,9 @@ from Pass.views import APISETPASS, APIAll, APISET, login_page, logout_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/get', APISETPASS),
-    path('api/all', APIAll),
-    path('api/set', APISET),
-    path('login', login_page),
-    path('logout', logout_page)
+    path('api/get/', APISETPASS),
+    path('api/all/', APIAll),
+    path('api/set/', APISET),
+    path('login/', login_page),
+    path('logout/', logout_page)
 ]
