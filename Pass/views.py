@@ -63,7 +63,17 @@ def make_pdf(request):
         # Draw things on the PDF. Here's where the PDF generation happens.
         # See the ReportLab documentation for the full list of functionality.
         p.drawString(200, 500, student.pass_gen)
-
+        p.drawString(200, 500, ' GoTo Camp запрещается и приводит к отчислению:')
+        p.drawString(200, 500, 'употребление алкоголя, ')
+        p.drawString(200, 500, 'курение')
+        p.drawString(200, 500, 'выход за территорию базы без сопровождения,')
+        p.drawString(200, 500, 'создание угрозы жизни, здоровью и учебе других людей или самого ')
+        p.drawString(200, 500, 'нарушителя (компьютерные игры, соцсети и т.п. во время занятий, ')
+        p.drawString(200, 500, 'выход из домов в ночное время и др.).')
+        p.drawString(200, 500, '')
+        p.drawString(200, 500, 'Отчисление происходит по решению директора. Если несовершеннолетнего')
+        p.drawString(200, 500, 'участника отчисляют из школы, родители или доверенные лица обязаны ')
+        p.drawString(200, 500, 'забрать его самостоятельно в течение 2 дней. ')
         # Close the PDF object cleanly, and we're done.
         p.showPage()
 
