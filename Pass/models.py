@@ -9,6 +9,7 @@ class Person(models.Model):
     vk_id = models.TextField()
     cours = models.TextField()
     pass_gen = models.TextField()
+    home_number = models.TextField()
 
 class Key(models.Model):
     key = models.TextField()
