@@ -1,3 +1,4 @@
+import qrcode as qrcode
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse, FileResponse
@@ -9,6 +10,13 @@ from Pass.models import Person, Key
 import secrets
 import pyqrcode
 import io
+
+qr = qrcode.QRCode(
+    version=1,
+    error_correction=qrcode.constants.ERROR_CORRECT_L,
+    box_size=10,
+    border=4,
+)
 
 key = Key()
 if key == '':
@@ -63,9 +71,13 @@ def make_pdf(request):
         # See the ReportLab documentation for the full list of functionality.
         p.drawString(150, 600, student.name)
         p.drawString(200, 600, student.surname)
-        qr_key = pyqrcode.create('0987654321', error='L', version=27, mode='binary')
-        qr_key.png('gotopass.png', scale=6, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xcc])
-        qr_key.show()
+        qr.make(fit=True)
+        img = qr.make_image()
+        arr = io.BytesIO()
+        img.save(arr, format='PNG')
+        #qr_key = pyqrcode.create('0987654321', error='L', version=27, mode='binary')
+        #qr_key.png('gotopass.png', scale=6, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xcc])
+        #qr_key.show()
         p.drawString(200, 500, qr_key)
         # Close the PDF object cleanly, and we're done.
         p.showPage()
