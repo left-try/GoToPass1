@@ -106,6 +106,7 @@ def APISETPASS(request):
         'surname': person_z.surname,
         'patronymic': person_z.otshestvo,
         'tg_id': person_z.tg_id,
+        'vk_id' : person_z.vk_id,
         'pass': person_z.pass_gen
     }
 
