@@ -135,7 +135,7 @@ def APISET(request):
 
 def APIAll (request):
 
-    if request.GET.get('key', '') == key:
+    if request.GET.get('key', '') == key.key:
         students = models.Person.all().count()
 
 
