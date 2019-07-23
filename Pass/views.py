@@ -62,6 +62,8 @@ def make_pdf(request):
         # See the ReportLab documentation for the full list of functionality.
         # Draw things on the PDF. Here's where the PDF generation happens.
         # See the ReportLab documentation for the full list of functionality.
+        #p.drawString(150, 600, student.name)
+        #p.drawString(200, 600, student.surname)
         p.drawString(200, 500, student.pass_gen)
         p.drawString(200, 500, ' GoTo Camp запрещается и приводит к отчислению:')
         p.drawString(200, 500, 'употребление алкоголя, ')
