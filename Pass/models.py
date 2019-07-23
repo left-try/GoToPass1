@@ -6,4 +6,9 @@ class Person(models.Model):
     surname = models.TextField()
     otchestvo = models.TextField()
     tg_id = models.TextField()
+    vk_id = models.TextField()
+    cours = models.TextField()
     pass_gen = models.TextField()
+
+class Key(models.Model):
+    key = models.TextField()

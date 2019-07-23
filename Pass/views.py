@@ -1,16 +1,18 @@
-import io
-
-import pyqrcode
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse, FileResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
-import secrets
-
 from reportlab.pdfgen import canvas
+from Pass import models
+from Pass.models import Person, Key
+import secrets
+import pyqrcode
+import io
 
-from Pass.models import Person
+key = Key()
+if key == '':
+    key.key = secrets.token_hex(16)
 
 
 def login_page(request):
@@ -53,10 +55,7 @@ def make_pdf(request):
 
 
     students = Person.objects.all()
-    # qr_key = pyqrcode.create('0987654321', error='L', version=27, mode='binary')
-    # qr_key.png('code.png', scale=6, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xcc])
-    # qr_key.show()
-    offset = 1
+
     for student in students:
         # Draw things on the PDF. Here's where the PDF generation happens.
         # See the ReportLab documentation for the full list of functionality.
@@ -64,23 +63,12 @@ def make_pdf(request):
         # See the ReportLab documentation for the full list of functionality.
         #p.drawString(150, 600, student.name)
         #p.drawString(200, 600, student.surname)
-        p.drawString(200, 500, student.pass_gen)
-        p.drawString(200, 500, ' GoTo Camp запрещается и приводит к отчислению:')
-        p.drawString(200, 500, 'употребление алкоголя, ')
-        p.drawString(200, 500, 'курение')
-        p.drawString(200, 500, 'выход за территорию базы без сопровождения,')
-        p.drawString(200, 500, 'создание угрозы жизни, здоровью и учебе других людей или самого ')
-        p.drawString(200, 500, 'нарушителя (компьютерные игры, соцсети и т.п. во время занятий, ')
-        p.drawString(200, 500, 'выход из домов в ночное время и др.).')
-        p.drawString(200, 500, '')
-        p.drawString(200, 500, 'Отчисление происходит по решению директора. Если несовершеннолетнего')
-        p.drawString(200, 500, 'участника отчисляют из школы, родители или доверенные лица обязаны ')
-        p.drawString(200, 500, 'забрать его самостоятельно в течение 2 дней. ')
+        qr_key = pyqrcode.create('0987654321', error='L', version=27, mode='binary')
+        qr_key.png('gotopass.png', scale=6, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xcc])
+        qr_key.show()
+        p.drawString(200, 500, qr_key)
         # Close the PDF object cleanly, and we're done.
         p.showPage()
-
-        offset += 20
-        #print("doing")
 
     p.showPage()
     p.save()
@@ -88,6 +76,7 @@ def make_pdf(request):
 
 
 def admink(request):
+
     if request.user.is_authenticated:
         if request.method == 'GET':
             students = Person.objects.all()
@@ -115,6 +104,7 @@ def APISETPASS(request):
     person = {
         'name': person_z.name,
         'surname': person_z.surname,
+        'patronymic': person_z.otshestvo,
         'tg_id': person_z.tg_id,
         'pass': person_z.pass_gen
     }
@@ -143,9 +133,22 @@ def APISET(request):
 
     return JsonResponse(person)
 
-
-
 def APIAll (request):
 
+    if request.GET.get('key', '') == key:
+        students = models.Person.all().count()
 
-    return JsonResponse([], safe=False)
+
+        all = []
+        i = 0
+        for student in students:
+            all[i] = {
+                'name': student.name,
+                'surname': student.surname,
+                'patronymic': student.otshestvo,
+                'tg_id': student.tg_id,
+                'pass': student.pass_gen
+            }
+
+
+    return JsonResponse(all, safe=False)
