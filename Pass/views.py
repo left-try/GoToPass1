@@ -98,7 +98,7 @@ def admink(request):
         return redirect('/login')
 
 
-def APISETPASS(request):
+def APIGETINFO(request):
     password = request.GET.get('pass', '')
     person_z = Person.objects.get(pass_gen=password)
     person = {
@@ -106,7 +106,9 @@ def APISETPASS(request):
         'surname': person_z.surname,
         'patronymic': person_z.otshestvo,
         'tg_id': person_z.tg_id,
-        'vk_id' : person_z.vk_id,
+        'vk_id': person_z.vk_id,
+        'home_number': person_z.home_number,
+        'cours': person_z.cours,
         'pass': person_z.pass_gen
     }
 
@@ -153,3 +155,50 @@ def APIAll (request):
 
 
     return JsonResponse(all, safe=False)
+
+
+def APISETVKID(request):
+    vk_id = request.GET.get('vk', '')
+    password = request.GET.get('pass', '')
+    person_z = Person.objects.get(pass_gen=password)
+    if vk_id == '' or password == '':
+        return HttpResponse("incorrect request", status=422)
+    else:
+        if password ==person_z.pass_gen:
+            person_z.vk_id = vk_id
+            person_z.save()
+
+        else:
+            return HttpResponse('Неправильный pass')
+    person = {
+        'name': person_z.name,
+        'surname': person_z.surname,
+        'tg_id': person_z.tg_id,
+        'pass': person_z.pass_gen
+    }
+    return JsonResponse(person)
+
+
+def APISETHOME(request):
+    password = request.GET.get('pass', '')
+    home_numb = request.GET.get('home', '')
+    person_z = Person.objects.get(pass_gen=password)
+    if home_numb == '' or password == '':
+        return HttpResponse("incorrect request", status=422)
+    else:
+        if password == person_z.pass_gen:
+            person_z.home_number = home_numb
+            person_z.save()
+
+        else:
+            return HttpResponse('Неправильный pass')
+    person = {
+        'name': person_z.name,
+        'surname': person_z.surname,
+        'tg_id': person_z.tg_id,
+        'pass': person_z.pass_gen
+    }
+    return JsonResponse(person)
+
+
+
