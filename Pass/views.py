@@ -61,8 +61,8 @@ def make_pdf(request):
         # See the ReportLab documentation for the full list of functionality.
         # Draw things on the PDF. Here's where the PDF generation happens.
         # See the ReportLab documentation for the full list of functionality.
-        #p.drawString(150, 600, student.name)
-        #p.drawString(200, 600, student.surname)
+        p.drawString(150, 600, student.name)
+        p.drawString(200, 600, student.surname)
         qr_key = pyqrcode.create('0987654321', error='L', version=27, mode='binary')
         qr_key.png('gotopass.png', scale=6, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xcc])
         qr_key.show()
