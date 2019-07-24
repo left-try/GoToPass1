@@ -87,6 +87,7 @@ def make_pdf(request):
     return response
 
 
+
 def admink(request):
 
     if request.user.is_authenticated:
