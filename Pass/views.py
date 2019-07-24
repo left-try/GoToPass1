@@ -88,6 +88,7 @@ def make_pdf(request):
     #return FileResponse(as_attachment=False, filename='p.pdf')
     return FileResponse(buffer, as_attachment=True, filename='gotopass.pdf')
 
+
 def admink(request):
 
     if request.user.is_authenticated:
