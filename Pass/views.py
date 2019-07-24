@@ -14,9 +14,7 @@ import secrets
 import pyqrcode
 import io
 import pdfkit
-from reportlab.pdfgen.canvas import Canvas
 import pdfkit
-from reportlab.pdfgen.canvas import Canvas
 
 
 #qr = qrcode.QRCode(
@@ -63,34 +61,32 @@ def logout_page(request):
 def make_pdf(request):
     if not request.user.is_authenticated:
         return redirect('/')
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="gotopass.pdf"'
+    #response = HttpResponse(content_type='application/pdf')
+    #response['Content-Disposition'] = 'attachment; filename="gotopass.pdf"; initialFontName=calibrili'
 
-    # Create the PDF object, using the response object as its "file."
-
-
-
+    buffer = io.BytesIO()
+    p = canvas.Canvas(buffer)
     students = Person.objects.all()
-    canvas = Canvas("canvas.pdf", pagesize=A4)
-    pdfmetrics.registerFont(TTFont('FreeSans', 'calibrili.ttf'))
-    canvas.setFont('FreeSans', 32)
+    #p = p("p.pdf", pagesize=A4)
+    #pdfmetrics.registerFont(TTFont('FreeSans', 'calibrili.ttf'))
+    #p.setFont('FreeSans', 32)
 
     for student in students:
-        canvas.drawString(150, 600, student.name)
-        canvas.drawString(200, 600, student.surname)
+        p.drawString(150, 600, student.name)
+        p.drawString(200, 600, student.surname)
         #qr.make(fit=True)
         #img = qr.make_image()
         #arr = io.BytesIO()
         #img.save(arr, format='PNG')
-        #canvas.drawImage(arr, 200, 700, 100, 100)
+        #p.drawImage(arr, 200, 700, 100, 100)
         #qr_key = pyqrcode.create('0987654321', error='L', version=27, mode='binary')
         #qr_key.png('gotopass.png', scale=6, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xcc])
         #qr_key.show()
-        #canvas.drawString(200, 500 , qr_key)
-    canvas.showPage()
-    canvas.save()
-    return FileResponse(filename='canvas.pdf')
-
+        #p.drawString(200, 500 , qr_key)
+    p.showPage()
+    p.save()
+    #return FileResponse(as_attachment=False, filename='p.pdf')
+    return FileResponse(buffer, as_attachment=True, filename='gotopass.pdf')
 
 def admink(request):
 
