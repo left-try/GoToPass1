@@ -91,6 +91,7 @@ def make_pdf(request):
     return pdfkit
 
 
+
 def admink(request):
 
     if request.user.is_authenticated:
