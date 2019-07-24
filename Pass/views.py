@@ -15,18 +15,20 @@ import pyqrcode
 import io
 import pdfkit
 from reportlab.pdfgen.canvas import Canvas
+import pdfkit
+from reportlab.pdfgen.canvas import Canvas
+
 
 qr = qrcode.QRCode(
     version=1,
     error_correction=qrcode.constants.ERROR_CORRECT_L,
-    box_size=10,
+   box_size=10,
     border=4,
 )
 
-
-# key = Key()
-# if key == '':
-#  key.key = secrets.token_hex(16)
+#key = Key()
+#if key == '':
+ #  key.key = secrets.token_hex(16)
 
 
 def login_page(request):
@@ -64,8 +66,11 @@ def make_pdf(request):
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="gotopass.pdf"'
 
-    students = Person.objects.all()
+    # Create the PDF object, using the response object as its "file."
 
+
+
+    students = Person.objects.all()
     canvas = Canvas("canvas.pdf", pagesize=A4)
     pdfmetrics.registerFont(TTFont('FreeSans', 'calibrili.ttf'))
     canvas.setFont('FreeSans', 32)
@@ -73,21 +78,22 @@ def make_pdf(request):
     for student in students:
         canvas.drawString(150, 600, student.name)
         canvas.drawString(200, 600, student.surname)
-        qr.make(fit=True)
-        img = qr.make_image()
-        arr = io.BytesIO()
-        img.save(arr, format='PNG')
-        # canvas.drawImage(arr, 200, 700, 100, 100)
-        # qr_key = pyqrcode.create('0987654321', error='L', version=27, mode='binary')
-        # qr_key.png('gotopass.png', scale=6, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xcc])
-        # qr_key.show()
-        # canvas.drawString(200, 500 , qr_key)
+        #qr.make(fit=True)
+        #img = qr.make_image()
+        #arr = io.BytesIO()
+        #img.save(arr, format='PNG')
+        canvas.drawImage(arr, 200, 700, 100, 100)
+        #qr_key = pyqrcode.create('0987654321', error='L', version=27, mode='binary')
+        #qr_key.png('gotopass.png', scale=6, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xcc])
+        #qr_key.show()
+        #canvas.drawString(200, 500 , qr_key)
     canvas.showPage()
     canvas.save()
-    return pdfkit
+    return FileResponse(filename='canvas.pdf')
 
 
 def admink(request):
+
     if request.user.is_authenticated:
         if request.method == 'GET':
             students = Person.objects.all()
@@ -164,7 +170,9 @@ def APIAll(request):
                 'pass': student.pass_gen
             })
 
+
     return JsonResponse(all, safe=False)
+
 
 
 def APISETVKID(request):
