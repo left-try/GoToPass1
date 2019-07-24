@@ -92,6 +92,7 @@ def make_pdf(request):
     return FileResponse(filename='canvas.pdf')
 
 
+
 def admink(request):
 
     if request.user.is_authenticated:
