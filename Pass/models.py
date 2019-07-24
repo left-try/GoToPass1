@@ -11,3 +11,4 @@ class Person(models.Model):
     pass_gen = models.TextField()
     home_number = models.TextField()
 
+
