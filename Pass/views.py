@@ -169,6 +169,7 @@ def APIAll (request):
     return JsonResponse(all, safe=False)
 
 
+
 def APISETVKID(request):
     vk_id = request.GET.get('vk', '')
     password = request.GET.get('pass', '')
