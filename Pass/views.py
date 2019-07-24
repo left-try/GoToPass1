@@ -203,6 +203,7 @@ def APISETHOME(request):
         'tg_id': person_z.tg_id,
         'pass': person_z.pass_gen
     }
+
     return JsonResponse(person)
 
 
