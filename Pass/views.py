@@ -22,7 +22,7 @@ from reportlab.pdfgen.canvas import Canvas
 qr = qrcode.QRCode(
     version=1,
     error_correction=qrcode.constants.ERROR_CORRECT_L,
-   box_size=10,
+    box_size=10,
     border=4,
 )
 
@@ -82,7 +82,7 @@ def make_pdf(request):
         #img = qr.make_image()
         #arr = io.BytesIO()
         #img.save(arr, format='PNG')
-        canvas.drawImage(arr, 200, 700, 100, 100)
+        #canvas.drawImage(arr, 200, 700, 100, 100)
         #qr_key = pyqrcode.create('0987654321', error='L', version=27, mode='binary')
         #qr_key.png('gotopass.png', scale=6, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xcc])
         #qr_key.show()
