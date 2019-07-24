@@ -11,7 +11,6 @@ from Pass.models import Person
 import secrets
 from reportlab.pdfgen.canvas import Canvas
 
-
 qr = qrcode.QRCode(
     version=1,
     error_correction=qrcode.constants.ERROR_CORRECT_L,
