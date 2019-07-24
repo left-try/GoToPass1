@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['192.168.0.33', '192.168.0.56', 'laretsky123456789.pythonanywhe
 
 
 
+
 INSTALLED_APPS = [
     'Pass',
     'django.contrib.admin',
