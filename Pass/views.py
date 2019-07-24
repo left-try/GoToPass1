@@ -158,13 +158,13 @@ def APIAll (request):
         all = []
         i = 0
         for student in students:
-            all[i] = {
+            all.append({
                 'name': student.name,
                 'surname': student.surname,
                 'patronymic': student.otshestvo,
                 'tg_id': student.tg_id,
                 'pass': student.pass_gen
-            }
+            })
 
 
     return JsonResponse(all, safe=False)
