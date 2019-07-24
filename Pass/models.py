@@ -4,7 +4,7 @@ from django.db import models
 class Person(models.Model):
     name = models.TextField()
     surname = models.TextField()
-    otchestvo = models.TextField()
+    patronymic = models.TextField()
     tg_id = models.TextField()
     vk_id = models.TextField()
     cours = models.TextField()

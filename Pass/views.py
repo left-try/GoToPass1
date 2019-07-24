@@ -1,6 +1,5 @@
-import qrcode as qrcode
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse, FileResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -8,19 +7,8 @@ from reportlab.pdfgen import canvas
 from Pass import models
 from Pass.models import Person, Key
 import secrets
-import pyqrcode
-import io
-
-qr = qrcode.QRCode(
-    version=1,
-    error_correction=qrcode.constants.ERROR_CORRECT_L,
-    box_size=10,
-    border=4,
-)
-
-key = Key()
-if key == '':
-    key.key = secrets.token_hex(16)
+# import pyqrcode
+# import io
 
 
 def login_page(request):
@@ -61,7 +49,6 @@ def make_pdf(request):
     # Create the PDF object, using the response object as its "file."
     p = canvas.Canvas(response)
 
-
     students = Person.objects.all()
 
     for student in students:
@@ -69,16 +56,12 @@ def make_pdf(request):
         # See the ReportLab documentation for the full list of functionality.
         # Draw things on the PDF. Here's where the PDF generation happens.
         # See the ReportLab documentation for the full list of functionality.
-        p.drawString(150, 600, student.name)
-        p.drawString(200, 600, student.surname)
-        qr.make(fit=True)
-        img = qr.make_image()
-        arr = io.BytesIO()
-        img.save(arr, format='PNG')
+        #p.drawString(150, 600, student.name)
+        #p.drawString(200, 600, student.surname)
         #qr_key = pyqrcode.create('0987654321', error='L', version=27, mode='binary')
         #qr_key.png('gotopass.png', scale=6, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xcc])
         #qr_key.show()
-        p.drawString(200, 500, qr_key)
+        p.drawString(200, 500, 'test')
         # Close the PDF object cleanly, and we're done.
         p.showPage()
 
@@ -102,7 +85,7 @@ def admink(request):
                     pers = Person()
                     pers.name = exempl[1]
                     pers.surname = exempl[0]
-                    pers.otchestvo = exempl[2]
+                    pers.patronymic = exempl[2]
                     pers.pass_gen = secrets.token_hex(16)
                     pers.save()
             return redirect('/')
@@ -113,10 +96,11 @@ def admink(request):
 def APIGETINFO(request):
     password = request.GET.get('pass', '')
     person_z = Person.objects.get(pass_gen=password)
+    print(person_z)
     person = {
         'name': person_z.name,
         'surname': person_z.surname,
-        'patronymic': person_z.otshestvo,
+        'patronymic': person_z.patronymic,
         'tg_id': person_z.tg_id,
         'vk_id': person_z.vk_id,
         'home_number': person_z.home_number,
@@ -125,6 +109,7 @@ def APIGETINFO(request):
     }
 
     return JsonResponse(person)
+
 
 def APISET(request):
     tg_id = request.GET.get('tg', '')
@@ -148,23 +133,24 @@ def APISET(request):
 
     return JsonResponse(person)
 
+
 def APIAll (request):
 
-    if request.GET.get('key', '') == key.key:
-        students = models.Person.all().count()
-
-
+    if request.GET.get('key', '') == 'c21e9d9f7c68192ef79c2a6dddcbb953':
+        students = models.Person.objects.all()
+        print(students)
         all = []
         i = 0
         for student in students:
-            all[i] = {
+            print(student)
+            all.append({
                 'name': student.name,
                 'surname': student.surname,
-                'patronymic': student.otshestvo,
+                'patronymic': student.patronymic,
                 'tg_id': student.tg_id,
                 'pass': student.pass_gen
-            }
-
+            })
+            i += 1
 
     return JsonResponse(all, safe=False)
 
@@ -213,4 +199,22 @@ def APISETHOME(request):
     return JsonResponse(person)
 
 
+def APISETCOURS(request):
+    password = request.GET.get('pass', '')
+    cours = request.GET.get('cours', '')
+    person_z = Person.objects.get(pass_gen=password)
+    if password == '':
+        return HttpResponse("incorrect request", status=422)
+    else:
+        if password == person_z.pass_gen:
+            person_z.cours = cours
+            person_z.save()
+
+    person = {
+        'name': person_z.name,
+        'surname': person_z.surname,
+        'tg_id': person_z.tg_id,
+        'pass': person_z.pass_gen
+    }
+    return JsonResponse(person)
 
