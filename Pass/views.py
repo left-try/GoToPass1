@@ -64,6 +64,7 @@ def make_pdf(request):
     #response = HttpResponse(content_type='application/pdf')
     #response['Content-Disposition'] = 'attachment; filename="gotopass.pdf"; initialFontName=calibrili'
 
+
     buffer = io.BytesIO()
     p = canvas.Canvas(buffer)
     students = Person.objects.all()
