@@ -11,5 +11,3 @@ class Person(models.Model):
     pass_gen = models.TextField()
     home_number = models.TextField()
 
-class Key(models.Model):
-    key = models.TextField()
