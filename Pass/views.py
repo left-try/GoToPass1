@@ -4,23 +4,29 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse, FileResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 from Pass import models
 from Pass.models import Person, Key
 import secrets
 import pyqrcode
 import io
+import pdfkit
+from reportlab.pdfgen.canvas import Canvas
+
 
 qr = qrcode.QRCode(
     version=1,
     error_correction=qrcode.constants.ERROR_CORRECT_L,
-    box_size=10,
+   box_size=10,
     border=4,
 )
 
-key = Key()
-if key == '':
-    key.key = secrets.token_hex(16)
+#key = Key()
+#if key == '':
+ #  key.key = secrets.token_hex(16)
 
 
 def login_page(request):
@@ -58,33 +64,31 @@ def make_pdf(request):
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="gotopass.pdf"'
 
-    # Create the PDF object, using the response object as its "file."
-    p = canvas.Canvas(response)
 
 
     students = Person.objects.all()
 
+    canvas = Canvas("canvas.pdf", pagesize=A4)
+    pdfmetrics.registerFont(TTFont('FreeSans', 'calibrili.ttf'))
+    canvas.setFont('FreeSans', 32)
+   
+
+
     for student in students:
-        # Draw things on the PDF. Here's where the PDF generation happens.
-        # See the ReportLab documentation for the full list of functionality.
-        # Draw things on the PDF. Here's where the PDF generation happens.
-        # See the ReportLab documentation for the full list of functionality.
-        p.drawString(150, 600, student.name)
-        p.drawString(200, 600, student.surname)
+        canvas.drawString(150, 600, student.name)
+        canvas.drawString(200, 600, student.surname)
         qr.make(fit=True)
         img = qr.make_image()
         arr = io.BytesIO()
         img.save(arr, format='PNG')
+        #canvas.drawImage(arr, 200, 700, 100, 100)
         #qr_key = pyqrcode.create('0987654321', error='L', version=27, mode='binary')
         #qr_key.png('gotopass.png', scale=6, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xcc])
         #qr_key.show()
-        p.drawString(200, 500, qr_key)
-        # Close the PDF object cleanly, and we're done.
-        p.showPage()
-
-    p.showPage()
-    p.save()
-    return response
+        #canvas.drawString(200, 500 , qr_key)
+    canvas.showPage()
+    canvas.save()
+    return pdfkit
 
 
 def admink(request):
