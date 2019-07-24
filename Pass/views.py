@@ -61,7 +61,6 @@ def make_pdf(request):
     # Create the PDF object, using the response object as its "file."
     p = canvas.Canvas(response)
 
-
     students = Person.objects.all()
 
     for student in students:
@@ -78,14 +77,13 @@ def make_pdf(request):
         #qr_key = pyqrcode.create('0987654321', error='L', version=27, mode='binary')
         #qr_key.png('gotopass.png', scale=6, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xcc])
         #qr_key.show()
-        p.drawString(200, 500, qr_key)
+        #p.drawString(200, 500, qr_key)
         # Close the PDF object cleanly, and we're done.
         p.showPage()
 
     p.showPage()
     p.save()
     return response
-
 
 
 def admink(request):
@@ -126,6 +124,7 @@ def APIGETINFO(request):
     }
 
     return JsonResponse(person)
+
 
 def APISET(request):
     tg_id = request.GET.get('tg', '')
@@ -215,4 +214,21 @@ def APISETHOME(request):
     return JsonResponse(person)
 
 
+def APISETCOURS(request):
+    password = request.GET.get('pass', '')
+    cours = request.GET.get('cours', '')
+    person_z = Person.objects.get(pass_gen=password)
+    if password == '':
+        return HttpResponse("incorrect request", status=422)
+    else:
+        if password == person_z.pass_gen:
+            person_z.cours = cours
+            person_z.save()
 
+    person = {
+        'name': person_z.name,
+        'surname': person_z.surname,
+        'tg_id': person_z.tg_id,
+        'pass': person_z.pass_gen
+    }
+    return JsonResponse(person)
