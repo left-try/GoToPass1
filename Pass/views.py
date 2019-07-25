@@ -60,10 +60,6 @@ def logout_page(request):
 def make_pdf(request):
     if not request.user.is_authenticated:
         return redirect('/')
-    #response = HttpResponse(content_type='application/pdf')
-    #response['Content-Disposition'] = 'attachment; filename="somefilename.pdf";'
-
-    #p_pdf = canvas.Canvas(response)
     students = Person.objects.all()
 
     p_pdf = Canvas("p_pdf.pdf", pagesize=A4)
@@ -73,7 +69,7 @@ def make_pdf(request):
         p_pdf.drawString(150, 700, student.name)
         p_pdf.drawString(200, 700, student.surname)
         p_pdf.drawString(200, 500, student.pass_gen)
-        qr.add_data('student.pass_gen')
+        qr.add_data(student.pass_gen)
         qr.make(fit=True)
         img = qr.make_image(fill_color="black", back_color="white")
         #p_pdf.drawImage(img, 200, 800,  mask='auto')
@@ -83,11 +79,8 @@ def make_pdf(request):
         #p_pdf.drawString(200, 500 , qr_key)
         p_pdf.showPage()
     p_pdf.save()
-    response = HttpResponse(content=p_pdf)
-    response['Content-Type'] = 'application/pdf'
-    response['Content-Disposition'] = 'attachment; filename="gotopass.pdf"'
-    return response
-    #return FileResponse(as_attachment=False, filename='p_pdf.pdf')
+    pdf = open('p_pdf.pdf', 'rb')
+    return FileResponse(pdf)
 
 
 def admink(request):
