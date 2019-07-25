@@ -123,7 +123,7 @@ def APIGETINFO(request):
         'home_number': person_z.home_number,
         'cours': person_z.cours,
         'id': person_z.id,
-        'pass': person_z.pass_gen
+        'pass': person_z.pass_gen,
     }
 
     return JsonResponse(person)
