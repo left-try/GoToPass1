@@ -1,14 +1,20 @@
 import qrcode
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse, FileResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfgen import canvas
 from Pass import models
 from Pass.models import Person
 import secrets
+import pyqrcode
+import io
+import pdfkit
+import pdfkit
 from reportlab.pdfgen.canvas import Canvas
 
 qr = qrcode.QRCode(
@@ -17,6 +23,10 @@ qr = qrcode.QRCode(
     box_size=10,
     border=4,
 )
+#key = Key()
+#if key == '':
+ #  key.key = secrets.token_hex(16)
+
 
 
 def login_page(request):
@@ -51,10 +61,10 @@ def logout_page(request):
 def make_pdf(request):
     if not request.user.is_authenticated:
         return redirect('/')
-    # response = HttpResponse(content_type='application/pdf')
-    # response['Content-Disposition'] = 'attachment; filename="somefilename.pdf";'
+    #response = HttpResponse(content_type='application/pdf')
+    #response['Content-Disposition'] = 'attachment; filename="somefilename.pdf";'
 
-    # p_pdf = canvas.Canvas(response)
+    #p_pdf = canvas.Canvas(response)
     students = Person.objects.all()
 
     p_pdf = Canvas("p_pdf.pdf", pagesize=A4)
@@ -64,21 +74,18 @@ def make_pdf(request):
         p_pdf.drawString(150, 700, student.name)
         p_pdf.drawString(200, 700, student.surname)
         p_pdf.drawString(200, 500, student.pass_gen)
-        qr.add_data('student.pass_gen')
+        qr.add_data(student.pass_gen)
         qr.make(fit=True)
         img = qr.make_image(fill_color="black", back_color="white")
-        # p_pdf.drawImage(img, 200, 800,  mask='auto')
-        # qr_key = pyqrcode.create('0987654321', error='L', version=27, mode='binary')
-        # qr_key.png('gotopass.png', scale=6, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xcc])
-        # qr_key.show()
-        # p_pdf.drawString(200, 500 , qr_key)
+        #p_pdf.drawImage(img, 200, 800,  mask='auto')
+        #qr_key = pyqrcode.create('0987654321', error='L', version=27, mode='binary')
+        #qr_key.png('gotopass.png', scale=6, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xcc])
+        #qr_key.show()
+        #p_pdf.drawString(200, 500 , qr_key)
         p_pdf.showPage()
     p_pdf.save()
-    response = HttpResponse(content=p_pdf)
-    response['Content-Type'] = 'application/pdf'
-    response['Content-Disposition'] = 'attachment; filename="gotopass.pdf"'
-    return response
-    # return FileResponse(as_attachment=False, filename='p_pdf.pdf')
+    pdf = open('p_pdf.pdf', 'rb')
+    return FileResponse(pdf)
 
 
 def admink(request):
@@ -159,7 +166,9 @@ def APIAll(request):
                 'pass': student.pass_gen
             })
 
+
     return JsonResponse(all, safe=False)
+
 
 
 def APISETVKID(request):
@@ -203,7 +212,6 @@ def APISETHOME(request):
         'tg_id': person_z.tg_id,
         'pass': person_z.pass_gen
     }
-
     return JsonResponse(person)
 
 
