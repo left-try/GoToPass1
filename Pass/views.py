@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse, FileResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from reportlab.lib.pagesizes import A4, A3, A1, A5
+from reportlab.lib.pagesizes import A4
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
@@ -60,6 +60,10 @@ def logout_page(request):
 def make_pdf(request):
     if not request.user.is_authenticated:
         return redirect('/')
+    #response = HttpResponse(content_type='application/pdf')
+    #response['Content-Disposition'] = 'attachment; filename="somefilename.pdf";'
+
+    #p_pdf = canvas.Canvas(response)
     students = Person.objects.all()
 
     p_pdf = Canvas("p_pdf.pdf", pagesize=A4)
@@ -151,7 +155,6 @@ def APIAll(request):
         students = models.Person.objects.all()
 
         all = []
-        i = 0
         for student in students:
             all.append({
                 'name': student.name,
