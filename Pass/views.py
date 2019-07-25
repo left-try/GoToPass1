@@ -28,7 +28,6 @@ qr = qrcode.QRCode(
  #  key.key = secrets.token_hex(16)
 
 
-
 def login_page(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
