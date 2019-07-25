@@ -115,6 +115,7 @@ def APIGETINFO(request):
         'vk_id': person_z.vk_id,
         'home_number': person_z.home_number,
         'cours': person_z.cours,
+        'id': person_z.id,
         'pass': person_z.pass_gen
     }
 
