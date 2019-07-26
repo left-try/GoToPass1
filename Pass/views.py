@@ -23,10 +23,6 @@ qr = qrcode.QRCode(
     box_size=10,
     border=4,
 )
-#key = Key()
-#if key == '':
- #  key.key = secrets.token_hex(16)
-
 
 
 def login_page(request):
@@ -66,6 +62,7 @@ def make_pdf(request):
     p_pdf = Canvas("p_pdf.pdf", pagesize=A4)
     for student in students:
         pdfmetrics.registerFont(TTFont('FreeSans', 'calibrili.ttf'))
+
         p_pdf.setFont('FreeSans', 12)
         p_pdf.drawString(150, 800, student.name)
         p_pdf.drawString(190, 800, student.surname)
@@ -81,6 +78,7 @@ def make_pdf(request):
         p_pdf.drawString(20, 490, 'участника отчисляют из школы, родители или доверенные лица обязаны ')
         p_pdf.drawString(20, 460, 'забрать его самостоятельно в течение 2 дней.')
         p_pdf.drawString(20, 430, 'Вот ваш GoToPass:')
+
         qr.add_data(student.pass_gen)
         qr.make(fit=True)
         img = qr.make_image(fill_color="black", back_color="white")
@@ -88,6 +86,7 @@ def make_pdf(request):
         p_pdf.drawString(200, 200, student.pass_gen)
         p_pdf.showPage()
         qr.clear()
+
     p_pdf.save()
     pdf = open('p_pdf.pdf', 'rb')
     return FileResponse(pdf)
@@ -171,9 +170,7 @@ def APIAll(request):
                 'pass': student.pass_gen
             })
 
-
     return JsonResponse(all, safe=False)
-
 
 
 def APISETVKID(request):
