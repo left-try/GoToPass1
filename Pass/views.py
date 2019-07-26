@@ -174,9 +174,13 @@ def APIAll(request):
             all.append({
                 'name': student.name,
                 'surname': student.surname,
-                'patronymic': student.otshestvo,
+                'patronymic': student.patronymic,
                 'tg_id': student.tg_id,
-                'pass': student.pass_gen
+                'vk_id': student.vk_id,
+                'home_number': student.home_number,
+                'cours': student.cours,
+                'id': student.id,
+                'pass': student.pass_gen,
             })
 
     return JsonResponse(all, safe=False)
