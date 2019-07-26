@@ -24,9 +24,10 @@ qr = qrcode.QRCode(
     border=4,
 )
 
-
+# страница для логина
 def login_page(request):
     if request.method == 'GET':
+        # если юзер залогинен - редирект на основную стр
         if request.user.is_authenticated:
             return redirect('/')
         return render(request, 'login.html')
@@ -54,15 +55,15 @@ def logout_page(request):
     return redirect('/login')
 
 
-def make_pdf(request):
-    if not request.user.is_authenticated:
+def make_pdf(request):                     # генерация pdf
+    if not request.user.is_authenticated:  # если не залогинен
         return redirect('/')
     students = Person.objects.all()
 
     p_pdf = Canvas("p_pdf.pdf", pagesize=A4)
     for student in students:
         pdfmetrics.registerFont(TTFont('FreeSans', 'calibrili.ttf'))
-
+        # памятка
         p_pdf.setFont('FreeSans', 12)
         p_pdf.drawString(150, 800, student.name)
         p_pdf.drawString(190, 800, student.surname)
@@ -79,6 +80,7 @@ def make_pdf(request):
         p_pdf.drawString(20, 460, 'забрать его самостоятельно в течение 2 дней.')
         p_pdf.drawString(20, 430, 'Вот ваш GoToPass:')
 
+        # генерация qr кода с Pass-ом
         qr.add_data(student.pass_gen)
         qr.make(fit=True)
         img = qr.make_image(fill_color="black", back_color="white")
@@ -92,7 +94,7 @@ def make_pdf(request):
     return FileResponse(pdf)
 
 
-def admink(request):
+def admink(request):  # страница для добавления участников лагеря
 
     if request.user.is_authenticated:
         if request.method == 'GET':
@@ -100,20 +102,26 @@ def admink(request):
             return render(request, 'admin.html', {'students': students})
         elif request.method == 'POST':
             if request.POST['submit'] == 'Выдать GoToPass':
-                # save to d
-                nso = request.POST['FirstLastname'].split('\n')
+                # запись участников в бд
+
+                nso = request.POST['FirstLastname'].split('\n')  # список из ФИО
+                # запись всех данных в своё поле
                 for student_nso in nso:
-                    exempl = student_nso.split(' ')
+                    exempl = student_nso.split(' ')  # список [Фамилия, Имя, Отчество]
+
                     pers = Person()
                     pers.name = exempl[1]
                     pers.surname = exempl[0]
                     pers.patronymic = exempl[2]
-                    pers.pass_gen = secrets.token_hex(16)
+                    pers.pass_gen = secrets.token_hex(16)  # запись и генерация Pass-токена
                     pers.save()
             return redirect('/')
     else:
         return redirect('/login')
 
+# №№№№№№№№№№№№ API №№№№№№№№№№№№№
+# документация по API - https://docs.google.com/document/d/1dd41TxSUM4Dg5NFpNAdrAFae-BUW2PjXVwL4YAGHRDU/edit?usp=sharing
+# TODO: иправить костыли и баги, если они есть
 
 def APIGETINFO(request):
     password = request.GET.get('pass', '')
@@ -146,6 +154,7 @@ def APISET(request):
 
         else:
             return HttpResponse('Неправильный pass')
+    # костыль
     person = {
         'name': person_z.name,
         'surname': person_z.surname,
@@ -186,6 +195,7 @@ def APISETVKID(request):
 
         else:
             return HttpResponse('Неправильный pass')
+    # костыль
     person = {
         'name': person_z.name,
         'surname': person_z.surname,
@@ -208,6 +218,7 @@ def APISETHOME(request):
 
         else:
             return HttpResponse('Неправильный pass')
+    # костыль
     person = {
         'name': person_z.name,
         'surname': person_z.surname,
@@ -227,7 +238,7 @@ def APISETCOURS(request):
         if password == person_z.pass_gen:
             person_z.cours = cours
             person_z.save()
-
+    # костыль
     person = {
         'name': person_z.name,
         'surname': person_z.surname,
