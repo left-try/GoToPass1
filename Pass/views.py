@@ -17,11 +17,12 @@ import pdfkit
 import pdfkit
 from reportlab.pdfgen.canvas import Canvas
 
-#qr = qrcode.QRCode(
- ##  error_correction=qrcode.constants.ERROR_CORRECT_L,
-   # box_size=10,
-    #border=4,
-#)
+qr = qrcode.QRCode(
+    version=1,
+    error_correction=qrcode.constants.ERROR_CORRECT_L,
+    box_size=10,
+    border=4,
+)
 #key = Key()
 #if key == '':
  #  key.key = secrets.token_hex(16)
@@ -60,28 +61,33 @@ def logout_page(request):
 def make_pdf(request):
     if not request.user.is_authenticated:
         return redirect('/')
-    #response = HttpResponse(content_type='application/pdf')
-    #response['Content-Disposition'] = 'attachment; filename="somefilename.pdf";'
-
-    #p_pdf = canvas.Canvas(response)
     students = Person.objects.all()
 
     p_pdf = Canvas("p_pdf.pdf", pagesize=A4)
     for student in students:
         pdfmetrics.registerFont(TTFont('FreeSans', 'calibrili.ttf'))
         p_pdf.setFont('FreeSans', 12)
-        p_pdf.drawString(150, 700, student.name)
-        p_pdf.drawString(200, 700, student.surname)
-        p_pdf.drawString(200, 500, student.pass_gen)
-        #qr.add_data(student.pass_gen)
-        #qr.make(fit=True)
-        #img = qr.make_image(fill_color="black", back_color="white")
-        #p_pdf.drawImage(img, 200, 800,  mask='auto')
-        #qr_key = pyqrcode.create('0987654321', error='L', version=27, mode='binary')
-        #qr_key.png('gotopass.png', scale=6, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xcc])
-        #qr_key.show()
-        #p_pdf.drawString(200, 500 , qr_key)
+        p_pdf.drawString(150, 800, student.name)
+        p_pdf.drawString(190, 800, student.surname)
+        p_pdf.drawString(20, 760, 'В GoTo Camp запрещается и приводит к отчислению:')
+        p_pdf.drawString(20, 730, 'употребление алкоголя,')
+        p_pdf.drawString(20, 700, 'курение,')
+        p_pdf.drawString(20, 670, 'выход за территорию базы без сопровождения,')
+        p_pdf.drawString(20, 640, 'создание угрозы жизни, здоровью и учебе других людей или самого ')
+        p_pdf.drawString(20, 610, 'нарушителя (компьютерные игры, соцсети и т.п. во время занятий,')
+        p_pdf.drawString(20, 580, 'выход из домов в ночное время и др.).')
+        p_pdf.drawString(20, 550, '')
+        p_pdf.drawString(20, 520, 'Отчисление происходит по решению директора. Если несовершеннолетнего ')
+        p_pdf.drawString(20, 490, 'участника отчисляют из школы, родители или доверенные лица обязаны ')
+        p_pdf.drawString(20, 460, 'забрать его самостоятельно в течение 2 дней.')
+        p_pdf.drawString(20, 430, 'Вот ваш GoToPass:')
+        qr.add_data(student.pass_gen)
+        qr.make(fit=True)
+        img = qr.make_image(fill_color="black", back_color="white")
+        p_pdf.drawInlineImage(img, 200, 250, 200, 200)
+        p_pdf.drawString(200, 200, student.pass_gen)
         p_pdf.showPage()
+        qr.clear()
     p_pdf.save()
     pdf = open('p_pdf.pdf', 'rb')
     return FileResponse(pdf)
