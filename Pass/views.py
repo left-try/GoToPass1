@@ -270,3 +270,24 @@ def APIINFOTGID(request):
         return JsonResponse(person)
     else:
         return HttpResponse("incorrect request", status=422)
+
+
+def APIINFOVKID(request):
+    vk_id = request.GET.get('tg', '')
+    if vk_id != '':
+        person_z = Person.objects.get(vk_id=vk_id)
+        person = {
+            'name': person_z.name,
+            'surname': person_z.surname,
+            'patronymic': person_z.patronymic,
+            'tg_id': person_z.tg_id,
+            'vk_id': person_z.vk_id,
+            'home_number': person_z.home_number,
+            'cours': person_z.cours,
+            'id': person_z.id,
+            'pass': person_z.pass_gen,
+        }
+
+        return JsonResponse(person)
+    else:
+        return HttpResponse("incorrect request", status=422)
