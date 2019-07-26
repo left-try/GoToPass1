@@ -17,12 +17,11 @@ import pdfkit
 import pdfkit
 from reportlab.pdfgen.canvas import Canvas
 
-qr = qrcode.QRCode(
-    version=1,
-    error_correction=qrcode.constants.ERROR_CORRECT_L,
-    box_size=10,
-    border=4,
-)
+#qr = qrcode.QRCode(
+ ##  error_correction=qrcode.constants.ERROR_CORRECT_L,
+   # box_size=10,
+    #border=4,
+#)
 #key = Key()
 #if key == '':
  #  key.key = secrets.token_hex(16)
@@ -74,9 +73,9 @@ def make_pdf(request):
         p_pdf.drawString(150, 700, student.name)
         p_pdf.drawString(200, 700, student.surname)
         p_pdf.drawString(200, 500, student.pass_gen)
-        qr.add_data(student.pass_gen)
-        qr.make(fit=True)
-        img = qr.make_image(fill_color="black", back_color="white")
+        #qr.add_data(student.pass_gen)
+        #qr.make(fit=True)
+        #img = qr.make_image(fill_color="black", back_color="white")
         #p_pdf.drawImage(img, 200, 800,  mask='auto')
         #qr_key = pyqrcode.create('0987654321', error='L', version=27, mode='binary')
         #qr_key.png('gotopass.png', scale=6, module_color=[0, 0, 0, 128], background=[0xff, 0xff, 0xcc])
