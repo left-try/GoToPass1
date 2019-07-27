@@ -273,7 +273,7 @@ def APIINFOTGID(request):
 
 
 def APIINFOVKID(request):
-    vk_id = request.GET.get('tg', '')
+    vk_id = request.GET.get('vk', '')
     if vk_id != '':
         person_z = Person.objects.get(vk_id=vk_id)
         person = {
