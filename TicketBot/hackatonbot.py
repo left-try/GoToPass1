@@ -34,7 +34,7 @@ def task_handler(message):
         # Расшифровывание QR кода с фотки
         data = decode(Image.open(BytesIO(data.content)))
         print(data)
-        r = requests.get('http://193.124.117.173:8000/api/set?tg={}&pass={}'.format(user_id, data[0].data.decode('ascii')))
+        r = requests.get('http://193.124.117.173:8000/api/set/tg?tg={}&pass={}'.format(user_id, data[0].data.decode('ascii')))
         print(data[0].data.decode('ascii'))
         bot.send_message(message.chat.id, 'Вы зарегистрированы')
     except:
