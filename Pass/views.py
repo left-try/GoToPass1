@@ -17,12 +17,12 @@ import pdfkit
 import pdfkit
 from reportlab.pdfgen.canvas import Canvas
 
-qr = qrcode.QRCode(
-    version=1,
-    error_correction=qrcode.constants.ERROR_CORRECT_L,
-    box_size=10,
-    border=4,
-)
+#qr = qrcode.QRCode(
+ #   version=1,
+  #  error_correction=qrcode.constants.ERROR_CORRECT_L,
+   # box_size=10,
+    #border=4,
+#)
 
 # страница для логина
 def login_page(request):
@@ -253,6 +253,7 @@ def APISETCOURS(request):
 
 def APIINFOTGID(request):
     tg_id = request.GET.get('tg', '')
+
     if tg_id != '':
         person_z = Person.objects.get(tg_id=tg_id)
         person = {
