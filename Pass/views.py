@@ -114,6 +114,7 @@ def admink(request):  # страница для добавления участ�
                     pers.name = exempl[1]
                     pers.surname = exempl[0]
                     pers.patronymic = exempl[2]
+                    pers.home_number = exempl[3]
                     pers.pass_gen = secrets.token_hex(16)  # запись и генерация Pass-токена
                     pers.save()
             return redirect('/')
@@ -196,29 +197,6 @@ def APISETVKID(request):
     else:
         if password == person_z.pass_gen:
             person_z.vk_id = vk_id
-            person_z.save()
-
-        else:
-            return HttpResponse('Неправильный pass')
-    # костыль
-    person = {
-        'name': person_z.name,
-        'surname': person_z.surname,
-        'tg_id': person_z.tg_id,
-        'pass': person_z.pass_gen
-    }
-    return JsonResponse(person)
-
-
-def APISETHOME(request):
-    password = request.GET.get('pass', '')
-    home_numb = request.GET.get('home', '')
-    person_z = Person.objects.get(pass_gen=password)
-    if home_numb == '' or password == '':
-        return HttpResponse("incorrect request", status=422)
-    else:
-        if password == person_z.pass_gen:
-            person_z.home_number = home_numb
             person_z.save()
 
         else:
