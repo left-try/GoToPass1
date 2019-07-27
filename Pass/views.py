@@ -60,6 +60,7 @@ def make_pdf(request):                     # генерация pdf
         return redirect('/')
     students = Person.objects.all()
 
+
     p_pdf = Canvas("p_pdf.pdf", pagesize=A4)
     for student in students:
         pdfmetrics.registerFont(TTFont('FreeSans', 'calibrili.ttf'))
