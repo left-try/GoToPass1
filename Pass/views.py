@@ -62,11 +62,11 @@ def make_pdf(request):                     # генерация pdf
 
     p_pdf = Canvas("p_pdf.pdf", pagesize=A4)
     for student in students:
-        pdfmetrics.registerFont(TTFont('FreeSans', 'calibri.ttf'))
+        pdfmetrics.registerFont(TTFont('FreeSans', 'calibrili.ttf'))
         # памятка
+        a = student.surname + ' ' + student.name
         p_pdf.setFont('FreeSans', 12)
-        p_pdf.drawString(150, 800, student.name)
-        p_pdf.drawString(190, 800, student.surname)
+        p_pdf.drawString(150, 800, a)
         p_pdf.drawString(20, 760, 'В GoTo Camp запрещается и приводит к отчислению:')
         p_pdf.drawString(20, 730, 'употребление алкоголя,')
         p_pdf.drawString(20, 700, 'курение,')
