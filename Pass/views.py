@@ -17,12 +17,12 @@ import pdfkit
 import pdfkit
 from reportlab.pdfgen.canvas import Canvas
 
-#qr = qrcode.QRCode(
- #   version=1,
-  #  error_correction=qrcode.constants.ERROR_CORRECT_L,
-   # box_size=10,
-    #border=4,
-#)
+qr = qrcode.QRCode(
+    version=1,
+    error_correction=qrcode.constants.ERROR_CORRECT_L,
+    box_size=10,
+    border=4,
+)
 
 # страница для логина
 def login_page(request):
@@ -78,8 +78,9 @@ def make_pdf(request):                     # генерация pdf
         p_pdf.drawString(20, 520, 'Отчисление происходит по решению директора. Если несовершеннолетнего ')
         p_pdf.drawString(20, 490, 'участника отчисляют из школы, родители или доверенные лица обязаны ')
         p_pdf.drawString(20, 460, 'забрать его самостоятельно в течение 2 дней.')
-        p_pdf.drawString(20, 430, 'Чтобы зарегистрировать вам нужно найти телеграм бота для регистрации по имени @RegisterGoToPass_bot')
-        p_pdf.drawString(20, 400, 'Вот ваш GoToPass:')
+        p_pdf.drawString(20, 430, 'Чтобы зарегистрироваться вам нужно найти телеграм бота для регистрации')
+        p_pdf.drawString(20, 400, 'Имя: @RegisterGoToPass_bot')
+        p_pdf.drawString(20, 370, 'Вот ваш GoToPass:')
 
         # генерация qr кода с Pass-ом
         qr.add_data(student.pass_gen)
