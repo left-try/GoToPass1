@@ -268,7 +268,7 @@ def APIINFOTGID(request):
         }
 
         return JsonResponse(person)
-    else:
+    elif tg_id == '':
         return HttpResponse("incorrect request", status=422)
 
 
@@ -289,5 +289,5 @@ def APIINFOVKID(request):
         }
 
         return JsonResponse(person)
-    else:
+    elif vk_id == '':
         return HttpResponse("incorrect request", status=422)
