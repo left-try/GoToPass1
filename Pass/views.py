@@ -62,7 +62,7 @@ def make_pdf(request):                     # генерация pdf
 
     p_pdf = Canvas("p_pdf.pdf", pagesize=A4)
     for student in students:
-        pdfmetrics.registerFont(TTFont('FreeSans', 'calibrili.ttf'))
+        pdfmetrics.registerFont(TTFont('FreeSans', 'calibri.ttf'))
         # памятка
         p_pdf.setFont('FreeSans', 12)
         p_pdf.drawString(150, 800, student.name)
