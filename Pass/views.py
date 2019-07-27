@@ -78,14 +78,15 @@ def make_pdf(request):                     # генерация pdf
         p_pdf.drawString(20, 520, 'Отчисление происходит по решению директора. Если несовершеннолетнего ')
         p_pdf.drawString(20, 490, 'участника отчисляют из школы, родители или доверенные лица обязаны ')
         p_pdf.drawString(20, 460, 'забрать его самостоятельно в течение 2 дней.')
-        p_pdf.drawString(20, 430, 'Вот ваш GoToPass:')
+        p_pdf.drawString(20, 430, 'Чтобы зарегистрировать вам нужно найти телеграм бота для регистрации по имени @RegisterGoToPass_bot')
+        p_pdf.drawString(20, 400, 'Вот ваш GoToPass:')
 
         # генерация qr кода с Pass-ом
         qr.add_data(student.pass_gen)
         qr.make(fit=True)
         img = qr.make_image(fill_color="black", back_color="white")
-        p_pdf.drawInlineImage(img, 200, 250, 200, 200)
-        p_pdf.drawString(200, 200, student.pass_gen)
+        p_pdf.drawInlineImage(img, 200, 150, 200, 200)
+        p_pdf.drawString(200, 100, student.pass_gen)
         p_pdf.showPage()
         qr.clear()
 
