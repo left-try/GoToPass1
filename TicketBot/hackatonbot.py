@@ -10,7 +10,7 @@ import json
 
 
 
-token = "843233261:AAG6YiNyV1IZy8xKnQm7CkQzwRPQbAnAGuw"
+token = '843233261:AAG6YiNyV1IZy8xKnQm7CkQzwRPQbAnAGuw'
 
 proxy = {'https': 'socks5h://geek:socks@t.geekclass.ru:7777'}
 
@@ -30,12 +30,15 @@ def task_handler(message):
     path = bot.get_file(file_id)
     p = 'https://api.telegram.org/file/bot{0}/'.format(token) + path.file_path
     data = requests.get(p, proxies=proxy)
-
-    data = decode(Image.open(BytesIO(data.content)))
-    print(data)
-    r = requests.get('http://193.124.117.173:8000/api/set?tg={}&pass={}'.format(user_id, data[0].data.decode('ascii')))
-    print(data[0].data.decode('ascii'))
-    pass
-
+    try:
+        # Расшифровывание QR кода с фотки
+        data = decode(Image.open(BytesIO(data.content)))
+        print(data)
+        r = requests.get('http://193.124.117.173:8000/api/set?tg={}&pass={}'.format(user_id, data[0].data.decode('ascii')))
+        print(data[0].data.decode('ascii'))
+        bot.send_message(message.chat.id, 'Вы зарегистрированы')
+    except:
+        # Если человек плохо сфоткал QR код плохо
+        bot.send_message(message.chat.id, 'QR код не видно. Сфоткайте QR ещё раз так, чтобы QR был чётким и помещался в кадр')
 # поллинг - вечный цикл с обновлением входящих сообщений
 bot.polling(none_stop=True)
